@@ -1,0 +1,10 @@
+# Godot and build artifacts
+.godot/
+builds/
+*.tmp
+*.log
+android/build/build/
+android/build/.gradle/
+debug.keystore
+godot_out.txt
+preview_server.js
