@@ -8,3 +8,4 @@ android/build/.gradle/
 debug.keystore
 godot_out.txt
 preview_server.js
+android/build/libs/
