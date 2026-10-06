@@ -1,0 +1,45 @@
+================================================================================
+SIGNAL KEEPER · OFFICIAL APP IDENTIFICATION & STORE SUBMISSION METADATA
+================================================================================
+
+App Name:
+Signal Keeper
+
+Package Name:
+com.hovahdigitalsolutions.signalkeeper
+
+Platform & Category:
+Android · Game → Puzzle
+
+Official Website:
+https://signal-keeper.hovahdigitalsolutions.com/
+
+Huawei App ID:
+119227547
+
+Petal Ad Unit ID:
+g0cz46kwsu
+
+SHA-256 Certificate Fingerprint (Verified against APK):
+EB:71:7B:02:B8:25:CC:CD:A9:D2:37:36:76:07:F6:16:73:05:8C:8B:F4:59:0F:ED:01:19:70:63:E9:15:AA:DB
+
+SHA-1 Digest:
+93:BD:D0:06:64:45:69:A8:CF:F6:51:4F:15:0B:43:A0:08:73:0D:A3
+
+MD5 Digest:
+90:4F:1A:4B:44:38:B7:33:93:75:E3:7F:53:8D:36:BE
+
+Submission Review URLs:
+- Privacy Policy URL:
+  https://signal-keeper.hovahdigitalsolutions.com/privacy.html
+- Data Subject Right URL:
+  https://signal-keeper.hovahdigitalsolutions.com/rights.html
+
+GitHub Repository & Pages:
+https://github.com/hovahyii/Signal-Keeper.git
+https://hovahyii.github.io/Signal-Keeper/
+
+Publisher / Developer:
+Hovah Digital Solutions
+Support Email: privacy@hovahdigitalsolutions.com
+================================================================================
