@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Certificate of Copyright Ownership - Signal Keeper</title>
+  <style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1200px;
+      height: 1680px;
+      background: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    .cert-frame {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border: 12px double #1e3a8a;
+      border-radius: 8px;
+      padding: 60px 70px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .cert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+    }
+    .company-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .company-logo {
+      width: 52px;
+      height: 52px;
+      background: #1e3a8a;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: -1px;
+    }
+    .company-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+    }
+    .company-sub {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .doc-meta {
+      text-align: right;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+    .doc-meta strong {
+      color: #1e293b;
+    }
+    .cert-title-block {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .cert-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .cert-main-title {
+      font-size: 30px;
+      font-weight: 900;
+      color: #1e3a8a;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .cert-subtitle {
+      font-size: 15px;
+      color: #475569;
+      font-weight: 500;
+    }
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .specs-table th, .specs-table td {
+      padding: 12px 18px;
+      font-size: 14px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    .specs-table th {
+      width: 32%;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+    .specs-table td {
+      color: #0f172a;
+      font-weight: 600;
+      font-family: inherit;
+    }
+    .specs-table td code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #0f172a;
+    }
+    .statement-box {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #334155;
+      margin-bottom: 30px;
+    }
+    .statement-box p {
+      margin-bottom: 14px;
+    }
+    .statement-box ol {
+      margin-left: 20px;
+      margin-bottom: 16px;
+    }
+    .statement-box li {
+      margin-bottom: 8px;
+    }
+    .sign-section {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 24px;
+      border-top: 2px solid #e2e8f0;
+    }
+    .seal-wrap {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .official-seal {
+      width: 130px;
+      height: 130px;
+      border: 4px dashed #1e3a8a;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #1e3a8a;
+      padding: 8px;
+      position: relative;
+    }
+    .official-seal .seal-star {
+      font-size: 16px;
+    }
+    .official-seal .seal-title {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .official-seal .seal-sub {
+      font-size: 8px;
+      font-weight: 700;
+      color: #2563eb;
+      margin-top: 2px;
+    }
+    .signature-box {
+      width: 320px;
+      text-align: right;
+    }
+    .sig-line {
+      border-bottom: 1.5px solid #0f172a;
+      margin-bottom: 8px;
+      height: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      font-family: "Brush Script MT", cursive, sans-serif;
+      font-size: 26px;
+      color: #1e3a8a;
+      padding-right: 12px;
+    }
+    .sig-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .sig-title {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .footer-notice {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="cert-frame">
+    <!-- Header -->
+    <div class="cert-header">
+      <div class="company-brand">
+        <div class="company-logo">HDS</div>
+        <div>
+          <div class="company-name">Hovah Digital Solutions</div>
+          <div class="company-sub">Software Development & Publishing Entity</div>
+        </div>
+      </div>
+      <div class="doc-meta">
+        <div><strong>Document Ref:</strong> HDS-IP-2026-SK-001</div>
+        <div><strong>Issue Date:</strong> October 6, 2026</div>
+        <div><strong>Jurisdiction:</strong> International / Global Distribution</div>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <div class="cert-title-block">
+      <div class="cert-badge">Intellectual Property Ownership Statement</div>
+      <h1 class="cert-main-title">CERTIFICATE OF COPYRIGHT & AUTHORSHIP</h1>
+      <p class="cert-subtitle">Official Declaration of Proprietary Software Rights for Huawei AppGallery</p>
+    </div>
+
+    <!-- Technical Specs Table -->
+    <table class="specs-table">
+      <tr>
+        <th>Work / Application Title</th>
+        <td>Signal Keeper</td>
+      </tr>
+      <tr>
+        <th>Android Package Name</th>
+        <td><code>com.hovahdigitalsolutions.signalkeeper</code></td>
+      </tr>
+      <tr>
+        <th>Huawei App ID</th>
+        <td><code>119227547</code></td>
+      </tr>
+      <tr>
+        <th>Software Platform & Category</th>
+        <td>Android · Mobile Game (Puzzle / Logic)</td>
+      </tr>
+      <tr>
+        <th>Official Domain & Portal</th>
+        <td>https://signal-keeper.hovahdigitalsolutions.com</td>
+      </tr>
+      <tr>
+        <th>Copyright Owner & Publisher</th>
+        <td>Hovah Digital Solutions</td>
+      </tr>
+      <tr>
+        <th>Verified SHA-256 Fingerprint</th>
+        <td><code style="font-size:11px;">EB:71:7B:02:B8:25:CC:CD:A9:D2:37:36:76:07:F6:16:73:05:8C:8B:F4:59:0F:ED:01:19:70:63:E9:15:AA:DB</code></td>
+      </tr>
+    </table>
+
+    <!-- Legal Declarations -->
+    <div class="statement-box">
+      <p>
+        <strong>TO WHOM IT MAY CONCERN AND TO THE HUAWEI APPGALLERY REVIEW COMMITTEE:</strong>
+      </p>
+      <p>
+        <strong>Hovah Digital Solutions</strong> hereby solemnly declares and certifies that it is the sole and exclusive legal creator, author, and intellectual property copyright owner of the mobile application software entitled <strong>"Signal Keeper"</strong> (Package Identifier: <code>com.hovahdigitalsolutions.signalkeeper</code>).
+      </p>
+      <ol>
+        <li>
+          <strong>Original Authorship & Creation:</strong> All computer program source code, shader routines, gameplay puzzle logic, pixel-art illustrations, UI graphic components, sound effects, and musical compositions comprising <em>Signal Keeper</em> were designed, authored, and created by Hovah Digital Solutions.
+        </li>
+        <li>
+          <strong>Absence of Third-Party Infringement:</strong> The application does not incorporate, infringe upon, or copy any copyrighted software, proprietary artwork, trade secret, or trademark belonging to any third-party individual or corporation.
+        </li>
+        <li>
+          <strong>Full Commercial & Publishing Authority:</strong> Hovah Digital Solutions possesses all necessary legal titles, unencumbered rights, and international distribution authority to publish, update, distribute, and monetize the Application globally through the Huawei AppGallery platform.
+        </li>
+        <li>
+          <strong>International Copyright Protection:</strong> This work is protected under the Berne Convention for the Protection of Literary and Artistic Works, the WIPO Copyright Treaty (WCT), and applicable international copyright laws.
+        </li>
+      </ol>
+      <p>
+        This certificate constitutes valid proof of copyright ownership and software authorization for publication and distribution on the Huawei AppGallery platform.
+      </p>
+    </div>
+
+    <!-- Signatures and Seal -->
+    <div class="sign-section">
+      <div class="seal-wrap">
+        <div class="official-seal">
+          <div class="seal-star">★ ★ ★</div>
+          <div class="seal-title">HOVAH DIGITAL</div>
+          <div class="seal-title">SOLUTIONS</div>
+          <div class="seal-sub">OFFICIAL IP SEAL</div>
+          <div class="seal-sub">AUTHENTICATED</div>
+          <div class="seal-star">★ ★ ★</div>
+        </div>
+        <div style="font-size:12px; color:#64748b; line-height:1.5;">
+          <strong>Corporate IP Registry</strong><br>
+          Verification ID: <code>HDS-SK-VERIFIED-2026</code><br>
+          Status: Verified & Effective
+        </div>
+      </div>
+
+      <div class="signature-box">
+        <div class="sig-line">Hovah Yii</div>
+        <div class="sig-name">Hovah Yii</div>
+        <div class="sig-title">Founder & Managing Director</div>
+        <div class="sig-title">Hovah Digital Solutions</div>
+      </div>
+    </div>
+
+    <!-- Footer Notice -->
+    <div class="footer-notice">
+      CONFIDENTIAL & OFFICIAL DOCUMENT · HOVAH DIGITAL SOLUTIONS · COPYRIGHT &copy; 2026 · ALL RIGHTS RESERVED
+    </div>
+  </div>
+</body>
+</html>
