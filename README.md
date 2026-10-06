@@ -71,3 +71,7 @@ Explore a dark relay station presented in crisp pixel art, with cyan signal path
 - **Data subject right URL:**  
   `https://signal-keeper.hovahdigitalsolutions.com/rights.html`  
   (or `https://hovahyii.github.io/Signal-Keeper/rights.html`)
+
+## Website source
+
+The website is maintained only in the docs/ folder. Edit its HTML, CSS, JavaScript, and assets there. GitHub Pages should publish from main /docs.
