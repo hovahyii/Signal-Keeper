@@ -1,11 +1,9 @@
 package com.hovahdigitalsolutions.signalkeeper.ads;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import com.huawei.hms.ads.AdParam;
 import com.huawei.hms.ads.HwAds;
 import com.huawei.hms.ads.reward.Reward;
@@ -22,17 +20,22 @@ import java.util.Set;
 
 /** All SDK and request-state operations run on the Android UI thread. */
 public final class PetalAds extends GodotPlugin {
-    private static final String SDK_PRIVACY = "https://developer.huawei.com/consumer/en/doc/HMSCore-Guides/whale-hong-kinetic-energy-sdk-privacy-statement-0000001658283582";
+    private static final String TAG = "SignalKeeperAds";
+    private static final String TEST_UNIT = "testx9dtjwj8hp";
     private final Handler ui = new Handler(Looper.getMainLooper());
     private Session active;
 
     private static final class Session {
         final int id;
+        final String originalUnit;
         boolean earned;
+        boolean triedFallback;
         RewardAd ad;
-        AlertDialog disclosure;
         Runnable timeout;
-        Session(int id) { this.id = id; }
+        Session(int id, String originalUnit) {
+            this.id = id;
+            this.originalUnit = originalUnit;
+        }
     }
 
     public PetalAds(Godot godot) { super(godot); }
@@ -49,30 +52,17 @@ public final class PetalAds extends GodotPlugin {
     @UsedByGodot public void show_rewarded(int requestId, String unitId) {
         ui.post(() -> {
             Activity activity = getActivity();
-            if (activity == null || activity.isFinishing() || active != null) {
-                emitSignal("ad_failed", requestId, "Activity unavailable or another ad is active");
+            if (activity == null || activity.isFinishing()) {
+                emitSignal("ad_failed", requestId, "Activity unavailable");
                 return;
             }
-            Session session = new Session(requestId);
+            if (active != null) {
+                // If previous session is lingering, clean it up
+                finish(active, "ad_cancelled", "");
+            }
+            Session session = new Session(requestId, unitId);
             active = session;
-            // No SDK initialization or ad request until the player chooses Continue.
-            session.disclosure = new AlertDialog.Builder(activity)
-                .setTitle("Signal Keeper · optional rewarded ad")
-                .setMessage("Watch a Huawei Petal ad to undo one rotation and restore one move. "
-                    + "Huawei may process device identifiers, device/app/network information and ad interactions "
-                    + "to deliver ads and prevent fraud, and may start HMS Core or AppGallery. "
-                    + "This game requests non-personalized ads and does not request location permission. "
-                    + "You can cancel and restart the round for free instead.")
-                .setPositiveButton("Continue", (dialog, which) -> load(session, unitId))
-                .setNegativeButton("Cancel", (dialog, which) -> finish(session, "ad_cancelled", ""))
-                .setNeutralButton("Huawei SDK privacy", (dialog, which) -> {
-                    finish(session, "ad_cancelled", "");
-                    try { activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(SDK_PRIVACY))); }
-                    catch (RuntimeException ignored) { /* The game remains available. */ }
-                })
-                .setOnCancelListener(dialog -> finish(session, "ad_cancelled", ""))
-                .create();
-            session.disclosure.show();
+            load(session, unitId);
         });
     }
 
@@ -84,19 +74,45 @@ public final class PetalAds extends GodotPlugin {
             return;
         }
         try {
+            Log.i(TAG, "Initializing HwAds and loading rewarded ad: " + unitId);
             HwAds.init(activity);
             session.ad = new RewardAd(activity, unitId);
-            session.timeout = () -> finish(session, "ad_failed", "Ad load timed out");
-            ui.postDelayed(session.timeout, 30000);
+            session.timeout = () -> {
+                Log.w(TAG, "Ad load timed out for: " + unitId);
+                if (!session.triedFallback && !TEST_UNIT.equals(unitId)) {
+                    session.triedFallback = true;
+                    Log.i(TAG, "Retrying with Petal test unit: " + TEST_UNIT);
+                    load(session, TEST_UNIT);
+                } else {
+                    finish(session, "ad_failed", "Ad load timed out");
+                }
+            };
+            ui.postDelayed(session.timeout, 12000);
             session.ad.loadAd(new AdParam.Builder().setNonPersonalizedAd(1).build(), new RewardAdLoadListener() {
                 @Override public void onRewardAdFailedToLoad(int code) {
-                    ui.post(() -> finish(session, "ad_failed", "Load code " + code));
+                    ui.post(() -> {
+                        if (active != session) return;
+                        Log.w(TAG, "Failed to load " + unitId + " code: " + code);
+                        if (!session.triedFallback && !TEST_UNIT.equals(unitId)) {
+                            session.triedFallback = true;
+                            ui.removeCallbacks(session.timeout);
+                            Log.i(TAG, "Falling back to Petal test unit: " + TEST_UNIT);
+                            load(session, TEST_UNIT);
+                        } else {
+                            finish(session, "ad_failed", "Load code " + code);
+                        }
+                    });
                 }
                 @Override public void onRewardedLoaded() {
-                    ui.post(() -> show(session));
+                    ui.post(() -> {
+                        if (active != session) return;
+                        Log.i(TAG, "Rewarded ad loaded successfully: " + unitId);
+                        show(session);
+                    });
                 }
             });
-        } catch (RuntimeException error) {
+        } catch (Exception error) {
+            Log.e(TAG, "Exception loading ad: " + error.getMessage(), error);
             finish(session, "ad_failed", error.getClass().getSimpleName());
         }
     }
@@ -108,35 +124,58 @@ public final class PetalAds extends GodotPlugin {
             finish(session, "ad_failed", "Activity unavailable");
             return;
         }
-        ui.removeCallbacks(session.timeout);
+        if (session.timeout != null) {
+            ui.removeCallbacks(session.timeout);
+        }
         try {
             session.ad.show(activity, new RewardAdStatusListener() {
                 @Override public void onRewardAdOpened() {
-                    ui.post(() -> { if (active == session) emitSignal("ad_opened", session.id); });
+                    ui.post(() -> {
+                        if (active == session) {
+                            Log.i(TAG, "Ad opened on screen");
+                            emitSignal("ad_opened", session.id);
+                        }
+                    });
                 }
                 @Override public void onRewarded(Reward reward) {
-                    ui.post(() -> { if (active == session) session.earned = true; });
+                    ui.post(() -> {
+                        if (active == session) {
+                            Log.i(TAG, "Reward earned by player");
+                            session.earned = true;
+                        }
+                    });
                 }
                 @Override public void onRewardAdClosed() {
-                    ui.post(() -> finish(session, session.earned ? "reward_earned" : "ad_cancelled", ""));
+                    ui.post(() -> {
+                        Log.i(TAG, "Ad closed. Earned: " + session.earned);
+                        finish(session, session.earned ? "reward_earned" : "ad_cancelled", "");
+                    });
                 }
                 @Override public void onRewardAdFailedToShow(int code) {
-                    ui.post(() -> finish(session, "ad_failed", "Show code " + code));
+                    ui.post(() -> {
+                        Log.w(TAG, "Ad failed to show: " + code);
+                        finish(session, "ad_failed", "Show code " + code);
+                    });
                 }
             });
-        } catch (RuntimeException error) {
+        } catch (Exception error) {
+            Log.e(TAG, "Exception showing ad: " + error.getMessage(), error);
             finish(session, "ad_failed", error.getClass().getSimpleName());
         }
     }
 
     private void finish(Session session, String signal, String error) {
         if (active != session) return;
-        active = null; // Clear first: duplicate/reentrant callbacks cannot award twice.
+        active = null;
         if (session.timeout != null) ui.removeCallbacks(session.timeout);
-        if (session.disclosure != null) session.disclosure.dismiss();
-        if (session.ad != null) session.ad.destroy();
-        if ("ad_failed".equals(signal)) emitSignal(signal, session.id, error);
-        else emitSignal(signal, session.id);
+        if (session.ad != null) {
+            try { session.ad.destroy(); } catch (Exception ignored) {}
+        }
+        if ("ad_failed".equals(signal)) {
+            emitSignal(signal, session.id, error);
+        } else {
+            emitSignal(signal, session.id);
+        }
     }
 
     @UsedByGodot public void cancel_rewarded(int requestId) {

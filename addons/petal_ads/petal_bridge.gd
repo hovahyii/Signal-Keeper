@@ -1,7 +1,7 @@
 extends Node
 ## Runtime adapter. Android never falls back to a simulated reward.
 const LIVE_UNIT := "g0cz46kwsu"
-const TEST_UNIT := "g0cz46kwsu"
+const TEST_UNIT := "testx9dtjwj8hp"
 var game: Node
 var native: Object
 
