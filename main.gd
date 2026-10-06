@@ -110,15 +110,11 @@ func _ready() -> void:
 
     # Audio setup
     bgm_player = AudioStreamPlayer.new()
-    var bgm_res = load("res://audio/bgm_ambient.wav")
-    if bgm_res:
-        if bgm_res is AudioStreamWAV:
-            bgm_res.loop_mode = AudioStreamWAV.LOOP_FORWARD
-        bgm_player.stream = bgm_res
-        bgm_player.autoplay = true
-        bgm_player.finished.connect(func(): if is_instance_valid(bgm_player): bgm_player.play())
-        add_child(bgm_player)
-        bgm_player.play()
+    # MP3 loops over the full track without WAV sample loop boundaries.
+    var bgm_res: AudioStreamMP3 = preload("res://audio/bgm_timelapse.mp3")
+    bgm_res.loop = true
+    bgm_player.stream = bgm_res
+    add_child(bgm_player)
 
     sfx_rotate_player = AudioStreamPlayer.new()
     var sfx_rot = load("res://audio/sfx_rotate.wav")

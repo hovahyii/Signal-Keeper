@@ -5,7 +5,14 @@ builds/
 *.log
 android/build/build/
 android/build/.gradle/
+android/build/local.properties
+android/build/libs/
 debug.keystore
 godot_out.txt
 preview_server.js
-android/build/libs/
+godot_help.txt
+
+# Scratch / temp files
+scratch/
+.verification/
+assets/
