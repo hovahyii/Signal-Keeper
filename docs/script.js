@@ -12,6 +12,7 @@ const i18nData = {
     nav_home: "首页概览",
     nav_privacy: "隐私政策",
     nav_rights: "主体权利",
+    nav_uxhmac: "UXHMAC 2026 大赛 ↗",
     hero_h1: "每一个连接 <span>都至关重要。</span>",
     hero_pitch: "《Signal Keeper》是一款每个连接都至关重要的紧凑型逻辑解谜游戏。",
     hero_story: "您将负责修复受损的中继基站，引导信号从发射源准确传输至接收终端。在应对干扰和有限的维修资源的同时，旋转中继节点，建立有效连接，保持传输信号的持续稳定。",
